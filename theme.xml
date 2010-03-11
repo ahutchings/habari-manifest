@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<theme>
+    <name>Manifest</name>
+    <author>Jim Barraud</author>
+    <url>http://jimbarraud.com/manifest/</url>
+    <version>1.0</version>
+    <description>&lt;p&gt;A clean and streamlined theme that focused on the content and not the distractions. It utilizes a single column, 500 pixel wide layout. No sidebars. No widgets. Ported to Habari by &lt;a href=&quot;http://github.com/ahutchings/habari-manifest&quot;&gt;Andrew Hutchings&lt;/a&gt;.</description>
+    <template_engine>rawphpengine</template_engine>
+    <license url="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 Unported License</license>
+</theme>
+
