@@ -1,4 +1,4 @@
-<?php get_header(); ?>
+<?php $theme->display('header') ?>
 
 <div id="coreContent">
 
@@ -21,4 +21,4 @@
 
 
 
-<?php get_footer(); ?>
+<?php $theme->display('footer') ?>

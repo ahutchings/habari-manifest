@@ -4,7 +4,7 @@ Template Name: Archives
 */
 ?>
 
-<?php get_header(); ?>
+<?php $theme->display('header') ?>
 
 <div id="coreContent">
   <div id="archives" class="single hentry">  
@@ -31,4 +31,4 @@ Template Name: Archives
 
 </div>
 
-<?php get_footer(); ?>
+<?php $theme->display('footer') ?>

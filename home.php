@@ -1,19 +1,21 @@
-<?php get_header(); ?>
+<?php $theme->display('header') ?>
 
     <div id="coreContent" class="hfeed">
       
-    	<?php if (have_posts()) : ?>
+    	<?php if (count($posts)): ?>
 
-    		<?php while (have_posts()) : the_post(); ?>
+    		<?php foreach ($posts as $post): ?>
 
       <div class="post hentry">
-        <?php the_date('F j, Y', '<h5 class="postDate"><abbr class="published">','</abbr></h5>'); ?>
+		<h5 class="postDate"><abbr class="published">
+		<?php echo $post->pubdate->text_format('{F} {j}, {Y}') ?>
+		</abbr></h5>
         <div class="postContent">
-          <h3 class="entry-title"><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title(); ?></a></h3>
-          <!-- <h4 class="vcard author">by <span class="fn"><?php the_author(); ?></span></h4> -->
+          <h3 class="entry-title"><a href="<?php echo $post->permalink ?>" rel="bookmark"><?php echo $post->title_out ?></a></h3>
+          <!-- <h4 class="vcard author">by <span class="fn"><?php echo $post->author->username ?></span></h4> -->
           
           <div class="entry-content">
-
+			
               <?php the_content('Read the rest of this entry &raquo;'); ?>
 
           </div>
@@ -35,7 +37,7 @@
         </div>
       </div>
 
-		<?php endwhile; ?>
+		<?php endforeach ?>
 
     <div class="pageNav">
       <div class="prev"><?php next_posts_link('&laquo; Older') ?></div>
@@ -52,4 +54,4 @@
   </div>
 
 
-<?php get_footer(); ?>
+<?php $theme->display('footer') ?>

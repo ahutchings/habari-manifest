@@ -3,7 +3,7 @@
 Template Name: Links
 */
 ?>
-<?php get_header(); ?>
+<?php $theme->display('header') ?>
 
 <div id="coreContent">
   <div id="links" class="single hentry">  
@@ -20,4 +20,4 @@ Template Name: Links
 
 </div>
 
-<?php get_footer(); ?>
+<?php $theme->display('footer') ?>
