@@ -3,7 +3,7 @@
 <div id="footer">
 
   <!-- Footer Links -->
-  
+
   <h5>Elsewhere</h5>
   <ul class="elsewhere">
     <li><a href="#">Facebook</a></li>
@@ -16,21 +16,22 @@
   </ul>
 
   <!-- Search Field -->
-  
+
   <div class="footerContent">
-    <form method="get" id="searchform" action="<?php bloginfo('url'); ?>/">
+    <?php Plugins::act('theme_searchform_before') ?>
+    <form method="get" id="searchform" action="<?php URL::out('display_search') ?>">
       <div id="search">
-        <input type="text" value="<?php the_search_query(); ?>" name="s" id="s" />
+        <input type="text" value="<?php if (isset($criteria)) { echo htmlentities($criteria, ENT_COMPAT, 'UTF-8'); } ?>" name="s" id="s" />
         <input type="submit" id="searchsubmit" value="Search" />
       </div>
     </form>
-    
-    
-    <p>&copy; <?php bloginfo('name'); ?>. Powered by <a href="http://wordpress.org/">WordPress</a> and <a href="http://jimbarraud.com/manifest/">Manifest</a></p>
+    <?php Plugins::act('theme_searchform_after') ?>
+
+    <p>&copy; <?php Options::out('title') ?>. Powered by <a href="http://habariproject.org/">Habari</a> and <a href="http://jimbarraud.com/manifest/">Manifest</a></p>
   </div>
 </div>
 
-<?php wp_footer(); ?>
+<?php echo $theme->footer() ?>
 
 </body>
 </html>
