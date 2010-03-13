@@ -40,8 +40,16 @@
     <?php $theme->display('comments') ?>
 
   <div class="pageNav">
-    <div class="prev"><?php previous_post_link('%link', '&laquo; Previous Post'); ?></div>
-    <div class="next"><?php next_post_link('%link', 'Next Post &raquo;') ?></div>
+    <div class="prev">
+    <?php if ($prev = $post->descend()): ?>
+        <a href="<?php echo $prev->permalink ?>" title="<?php echo $prev->title_out ?>">&laquo; Previous Post</a>
+    <?php endif ?>
+    </div>
+    <div class="next">
+    <?php if ($next = $post->ascend()): ?>
+        <a href="<?php echo $next->permalink ?>" title="<?php echo $next->title_out ?>">Next Post &raquo;</a>
+    <?php endif ?>
+    </div>
   </div>
 
 </div>

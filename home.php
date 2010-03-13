@@ -40,8 +40,8 @@
         <?php endforeach ?>
 
     <div class="pageNav">
-      <div class="prev"><?php next_posts_link('&laquo; Older') ?></div>
-      <div class="next"><?php previous_posts_link('Newer &raquo;') ?></div>
+      <div class="prev"><?php $theme->next_page_link('&laquo; Older') ?></div>
+      <div class="next"><?php $theme->prev_page_link('Newer &raquo;') ?></div>
     </div>
 
     <?php else : ?>
