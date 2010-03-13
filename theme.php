@@ -4,6 +4,11 @@ define('THEME_CLASS', 'Manifest');
 
 class Manifest extends Theme
 {
+    public function action_init_theme()
+    {
+        Format::apply('tag_and_list', 'post_tags_out', ' : ', ' : ');
+    }
+
     /**
     * Basic emulation of wp_title().
     */

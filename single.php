@@ -21,8 +21,9 @@
 
           <div class="postDate"><span>Published:</span> <abbr class="published" title="<?php echo $post->pubdate->text_format('{Y}-{m}-{d}T{H}:{i}:{s}{O}') ?>">
             <a href="<?php URL::out('display_entries_by_date', $arc_args) ?>"><?php echo $post->pubdate->text_format('{F} {j}, {Y}'); ?></a></abbr></div>
-            <div class="categories"><span>Filed Under:</span> <?php the_category(', '); ?></div>
-            <?php the_tags('<span>Tags:</span> ', ' : ', ''); ?>
+            <?php if (count($post->tags)): ?>
+            <span>Tags:</span> <?php echo $post->tags_out ?>
+            <?php endif ?>
         </div>
       </div>
 
