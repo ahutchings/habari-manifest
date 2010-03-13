@@ -166,8 +166,6 @@ class Manifest extends Theme
     /**
      * Determine if SSL is used.
      *
-     * @since 2.6.0
-     *
      * @return bool True if SSL, false if not used.
      */
     public static function is_ssl() {
@@ -180,5 +178,16 @@ class Manifest extends Theme
             return true;
         }
         return false;
+    }
+
+    public function add_template_vars()
+    {
+        if ($this->request->display_404) {
+            if (!$this->template_engine->assigned('posts')) {
+                $this->assign('posts', Posts::get(array('content_type' => 'entry', 'status' => Post::status('published'), 'limit' => 5)));
+            }
+        }
+
+        parent::add_template_vars();
     }
 }

@@ -15,18 +15,16 @@
 
 
    <h4>Recent Articles</h4>
-
-   <?php query_posts('cat=&showposts=5'); ?>
    <ul id="recentPosts">
 
-           <?php while (have_posts()) : the_post(); ?>
+      <?php foreach ($posts as $post): ?>
 
       <li>
-        <a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title(); ?></a>
-        <div class="postDate"><abbr class="published" title="<?php the_time('Y-m-d\TH:i:sO') ?>"><?php the_date('F j, Y') ?></abbr></div>
+        <a href="<?php echo $post->permalink ?>" rel="bookmark"><?php echo $post->title_out ?></a>
+        <div class="postDate"><abbr class="published" title="<?php echo $post->pubdate->text_format('{Y}-{m}-{d}T{H}:{i}:{s}{O}') ?>"><?php echo $post->pubdate->text_format('{F} {j}, {Y}') ?></abbr></div>
       </li>
 
-           <?php endwhile; ?>
+      <?php endforeach ?>
 
     </ul>
        </div>
