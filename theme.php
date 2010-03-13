@@ -190,4 +190,82 @@ class Manifest extends Theme
 
         parent::add_template_vars();
     }
+
+    public function tag_cloud($args = '')
+    {
+        $tags = Tags::get();
+
+        if (count($tags) == 0) {
+            return;
+        }
+
+        $counts = array();
+        foreach ($tags as $tag) {
+            $counts[] = $tag->count;
+        }
+
+        $largest = 22;
+        $smallest = 8;
+
+        $min_count = min( $counts );
+        $spread = max( $counts ) - $min_count;
+        if ( $spread <= 0 )
+            $spread = 1;
+        $font_spread = $largest - $smallest;
+        if ( $font_spread < 0 )
+            $font_spread = 1;
+        $font_step = $font_spread / $spread;
+
+        $a = array();
+
+        foreach ($tags as $tag) {
+            $tag_link = URL::get('display_entries_by_tag', array('tag' => $tag->slug));
+            $a[] = "<a href='$tag_link' class='tag-link-$tag->id' title='" . $tag->count. " topic(s)' rel='tag' style='font-size: " .
+                ( $smallest + ( ( $tag->count - $min_count ) * $font_step ) )
+                . "pt;'>$tag->tag</a>";
+        }
+
+        $return = "<ul class='wp-tag-cloud'>\n\t<li>";
+        $return .= implode( "</li>\n\t<li>", $a );
+        $return .= "</li>\n</ul>\n";
+
+        return $return;
+    }
+
+    public function get_archives()
+    {
+        $q = "SELECT YEAR( FROM_UNIXTIME(pubdate) ) AS year, MONTH(  FROM_UNIXTIME(pubdate)  ) AS month, COUNT( id ) AS cnt
+                FROM  {posts}
+                WHERE content_type = ? AND status = ?
+                GROUP BY year, month
+                ORDER BY pubdate DESC";
+        $p[]= Post::type( 'entry' );
+        $p[]= Post::status( 'published' );
+        $results = DB::get_results( $q, $p );
+
+
+        $archives[]= '<ul id="monthly_archives">';
+
+        if ( empty( $results ) ) {
+            $archives[]= '<li>No Archives Found</li>';
+        } else {
+            foreach ($results as $result) {
+
+                // make sure the month has a 0 on the front, if it doesn't
+                $result->month = str_pad( $result->month, 2, 0, STR_PAD_LEFT );
+
+                $result->month_ts = mktime( 0, 0, 0, $result->month );
+                $result->display_month = date('F', $result->month_ts);
+
+                $archives[]= '<li>';
+                $archives[]= '<a href="' . URL::get( 'display_entries_by_date', array('year' => $result->year, 'month' => $result->month)) . '" title="' . $result->display_month . ' ' . $result->year . '">' . $result->display_month . ' ' . $result->year . '</a>';
+                $archives[]= '</li>';
+
+            }
+        }
+
+        $archives[]= '</ul>';
+
+        return implode("\n", $archives);
+    }
 }

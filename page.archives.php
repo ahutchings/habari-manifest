@@ -3,24 +3,18 @@
 
 <div id="coreContent">
   <div id="archives" class="single hentry">
-    <h2 class="entry-title"><?php the_title(); ?></h2>
+    <h2 class="entry-title"><?php echo $post->title_out ?></h2>
 
     <div id="date">
       <h3>Months</h3>
       <ul>
-        <?php wp_get_archives('type=monthly'); ?>
+        <?php echo $theme->get_archives() ?>
       </ul>
     </div>
 
     <div id="categoryTags">
-      <h3>Categories</h3>
-      <ul class="categories">
-      <?php wp_list_categories('title_li='); ?>
-      </ul>
-
       <h3>Tags</h3>
-      <?php wp_tag_cloud('format=list'); ?>
-
+      <?php echo $theme->tag_cloud() ?>
     </div>
   </div>
 
