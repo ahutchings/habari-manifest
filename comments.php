@@ -24,79 +24,63 @@
   <h4 id="comments">Comments</h4>
 
     <?php foreach ($post->comments->moderated as $comment): ?>
-
+    <?php
+        if ($comment->url_out == '') {
+            $comment_url = $comment->name_out;
+        } else {
+            $comment_url = '<a href="' . $comment->url_out . '" rel="external">' . $comment->name_out . '</a>';
+        }
+    ?>
     <div class="commentEntry">
-      <?php echo get_avatar( $comment, $size = '48' ); ?>
+      <?php echo $theme->get_avatar($comment, $size = '48') ?>
         <div class="commentContent" id="comment-<?php echo $comment->id ?>">
-        <?php if ($comment->comment_approved == '0') : ?>
-              <em>Your comment is awaiting moderation.</em>
-              <?php endif; ?>
+        <?php if ($comment->status == Comment::STATUS_UNAPPROVED) : ?>
+            <em>Your comment is awaiting moderation.</em>
+        <?php endif; ?>
 
         <?php echo $comment->content_out ?>
 
        <div class="commentMeta">
-        posted by <cite><?php comment_author_link() ?></cite> on <a href="#comment-<?php comment_ID() ?>" title=""><?php comment_date('m.d.y') ?></a> at <?php comment_time() ?> <?php edit_comment_link('edit','&nbsp;&nbsp;',''); ?>
+        posted by <cite><?php echo $comment_url ?></cite> on <a href="#comment-<?php echo $comment->id ?>" title=""><?php $comment->date->out('m.d.y') ?></a> at <?php $comment->date->out('h:m a') ?>
       </div>
      </div>
     </div>
 
     <?php endforeach; /* end for each comment */ ?>
-
-    <?php if ($post->info->comments_disabled) : ?>
-      <div class="nocomments">Comments are closed.</div>
-    <?php endif; ?>
-
-
- <?php else : // this is displayed if there are no comments so far ?>
-
-    <?php if (!$post->info->comments_disabled) : ?>
-        <!-- If comments are open, but there are no comments. -->
-
-     <?php else : // comments are closed ?>
-        <!-- If comments are closed. -->
-        <div class="nocomments">Comments are closed.</div>
-
-    <?php endif; ?>
 <?php endif; ?>
 
+<?php if ($post->info->comments_disabled): ?>
+        <!-- If comments are closed. -->
+        <div class="nocomments">Comments are closed.</div>
+<?php endif ?>
 
-<?php if ('open' == $post->comment_status) : ?>
 
+<?php if (!$post->info->comments_disabled): ?>
 
-<?php if ( get_option('comment_registration') && !$user_ID ) : ?>
-<p>You must be <a href="<?php echo get_option('siteurl'); ?>/wp-login.php?redirect_to=<?php the_permalink(); ?>">logged in</a> to post a comment.</p>
-<?php else : ?>
-
-<form action="<?php echo get_option('siteurl'); ?>/wp-comments-post.php" method="post" id="commentform">
+<form action="<?php URL::out('submit_feedback', array('id' => $post->id)) ?>" method="post" id="commentform">
 
 
   <div class="leaveComment">
-    <?php if ( $user_ID ) : ?>
+    <?php if ($loggedin) : ?>
 
-    <p class="loggedin">Logged in as <a href="<?php echo get_option('siteurl'); ?>/wp-admin/profile.php"><?php echo $user_identity; ?></a>. <a href="<?php echo get_option('siteurl'); ?>/wp-login.php?action=logout" title="Log out of this account">Logout &raquo;</a></p>
-
+    <p class="loggedin">Logged in as <a href="<?php URL::out('user_profile', array('page' => 'user', 'user' => $user->username)) ?>"><?php echo $user->username ?></a>. <a href="<?php URL::out('user', 'page=logout') ?>" title="Log out of this account">Logout &raquo;</a></p>
 
     <?php endif; ?>
 
     <fieldset>
       <legend><span>Leave a Comment</span></legend>
       <div class="commentForm">
-        <label>Name: <em>Required</em> <input type="text" name="author" id="author" value="<?php echo $comment_author; ?>" /></label>
-        <label>Email: <em>Required, not published</em> <input type="text" name="email" id="email" value="<?php echo $comment_author_email; ?>" /></label>
-        <label>Homepage: <input type="text" name="url" id="url" value="<?php echo $comment_author_url; ?>" /></label>
+        <label>Name: <em><?php if (Options::get('comments_require_id')): ?>Required<?php endif ?></em> <input type="text" name="name" id="name" value="<?php echo $commenter_name ?>" /></label>
+        <label>Email: <em><?php if (Options::get('comments_require_id')): ?>Required, not published<?php else: ?>Not published<?php endif ?></em> <input type="text" name="email" id="email" value="<?php echo $commenter_email ?>" /></label>
+        <label>Homepage: <input type="text" name="url" id="url" value="<?php echo $commenter_url ?>" /></label>
         <label>Comment:
-        <textarea name="comment" id="comment" cols="50" rows="20"></textarea></label>
-        <input type="submit" value="Post Comment" /> <input type="hidden" name="comment_post_ID" value="<?php echo $id; ?>" />
+        <textarea name="content" id="content" cols="50" rows="20"></textarea></label>
+        <input type="submit" value="Post Comment" />
       </div>
     </fieldset>
   </div>
 
-<?php do_action('comment_form', $post->ID); ?>
-
 </form>
 
-<?php endif; // If registration required and not logged in ?>
-
-
 <?php endif; // if you delete this the sky will fall on your head ?>
-  </div>
+</div>
