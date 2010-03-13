@@ -1,3 +1,4 @@
+<?php defined('HABARI_PATH') or die('No direct script access.') ?>
 </div>
 
 <div id="footer">

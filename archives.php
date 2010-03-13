@@ -1,22 +1,17 @@
-<?php
-/*
-Template Name: Archives
-*/
-?>
-
+<?php defined('HABARI_PATH') or die('No direct script access.') ?>
 <?php $theme->display('header') ?>
 
 <div id="coreContent">
-  <div id="archives" class="single hentry">  
+  <div id="archives" class="single hentry">
     <h2 class="entry-title"><?php the_title(); ?></h2>
-    
+
     <div id="date">
       <h3>Months</h3>
       <ul>
         <?php wp_get_archives('type=monthly'); ?>
       </ul>
     </div>
-    
+
     <div id="categoryTags">
       <h3>Categories</h3>
       <ul class="categories">

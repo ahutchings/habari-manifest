@@ -1,4 +1,4 @@
-<?php
+<?php defined('HABARI_PATH') or die('No direct script access.');
 
 define('THEME_CLASS', 'Manifest');
 

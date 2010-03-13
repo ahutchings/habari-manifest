@@ -1,3 +1,4 @@
+<?php defined('HABARI_PATH') or die('No direct script access.') ?>
 <?php $theme->display('header') ?>
 
 <div id="coreContent" class="searchresults">

@@ -1,3 +1,4 @@
+<?php defined('HABARI_PATH') or die('No direct script access.') ?>
 <?php $theme->display('header') ?>
 
 <div id="coreContent">
@@ -18,17 +19,17 @@
    <?php query_posts('cat=&showposts=5'); ?>
    <ul id="recentPosts">
 
-   		<?php while (have_posts()) : the_post(); ?>
+           <?php while (have_posts()) : the_post(); ?>
 
       <li>
         <a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title(); ?></a>
         <div class="postDate"><abbr class="published" title="<?php the_time('Y-m-d\TH:i:sO') ?>"><?php the_date('F j, Y') ?></abbr></div>
       </li>
 
-   		<?php endwhile; ?>
-   
+           <?php endwhile; ?>
+
     </ul>
-   	</div>
+       </div>
 
 </div>
 
