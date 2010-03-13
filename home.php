@@ -2,9 +2,9 @@
 
     <div id="coreContent" class="hfeed">
 
-        <?php if (count($posts)): ?>
+    <?php if (count($posts)): ?>
 
-            <?php foreach ($posts as $post): ?>
+        <?php foreach ($posts as $post): ?>
 
       <div class="post hentry">
         <h5 class="postDate"><abbr class="published">
@@ -16,23 +16,23 @@
 
           <div class="entry-content">
 
-              <?php the_content('Read the rest of this entry &raquo;'); ?>
+              <?php echo $post->content_out ?>
 
           </div>
         </div>
         <div class="postMeta">
 
-        <?php if ('closed' == $post->comment_status) : ?>
+        <?php if ($post->info->comments_disabled): ?>
 
           <div class="comments closed">
 
-             <?php else : ?>
+        <?php else: ?>
 
           <div class="comments">
 
-          <?php endif; ?>
+        <?php endif; ?>
 
-            <?php comments_popup_link('leave a comment', '1 comment', '% comments', '', 'comments closed'); ?>
+            <?php $theme->comments_popup_link($post, 'leave a comment', '1 comment', '% comments', '', 'comments closed'); ?>
           </div>
         </div>
       </div>
