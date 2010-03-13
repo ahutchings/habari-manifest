@@ -1,62 +1,62 @@
 <?php // Do not delete these lines
-	if ('comments.php' == basename($_SERVER['SCRIPT_FILENAME']))
-		die ('Please do not load this page directly. Thanks!');
+    if ('comments.php' == basename($_SERVER['SCRIPT_FILENAME']))
+        die ('Please do not load this page directly. Thanks!');
 
-	if (!empty($post->post_password)) { // if there's a password
-		if ($_COOKIE['wp-postpass_' . COOKIEHASH] != $post->post_password) {  // and it doesn't match the cookie
-			?>
+    if (!empty($post->post_password)) { // if there's a password
+        if ($_COOKIE['wp-postpass_' . COOKIEHASH] != $post->post_password) {  // and it doesn't match the cookie
+            ?>
 
-			<p class="nocomments">This post is password protected. Enter the password to view comments.</p>
+            <p class="nocomments">This post is password protected. Enter the password to view comments.</p>
 
-			<?php
-			return;
-		}
-	}
+            <?php
+            return;
+        }
+    }
 
-	/* This variable is for alternating comment background */
-	$oddcomment = 'class="alt" ';
+    /* This variable is for alternating comment background */
+    $oddcomment = 'class="alt" ';
 ?>
 
 <!-- You can start editing here. -->
 <div id="comments">
-<?php if ($comments) : ?>
+<?php if ($post->comments->moderated->count): ?>
 
   <h4 id="comments">Comments</h4>
 
-	<?php foreach ($comments as $comment) : ?>
+    <?php foreach ($post->comments->moderated as $comment): ?>
 
     <div class="commentEntry">
       <?php echo get_avatar( $comment, $size = '48' ); ?>
-        <div class="commentContent" id="comment-<?php comment_ID() ?>">
+        <div class="commentContent" id="comment-<?php echo $comment->id ?>">
         <?php if ($comment->comment_approved == '0') : ?>
-  			<em>Your comment is awaiting moderation.</em>
-  			<?php endif; ?>
-  			
-        <?php comment_text() ?>
-        
+              <em>Your comment is awaiting moderation.</em>
+              <?php endif; ?>
+
+        <?php echo $comment->content_out ?>
+
        <div class="commentMeta">
         posted by <cite><?php comment_author_link() ?></cite> on <a href="#comment-<?php comment_ID() ?>" title=""><?php comment_date('m.d.y') ?></a> at <?php comment_time() ?> <?php edit_comment_link('edit','&nbsp;&nbsp;',''); ?>
       </div>
      </div>
     </div>
-      
-	<?php endforeach; /* end for each comment */ ?>
-  
-  <?php if ('closed' == $post->comment_status) : ?>
-	  <div class="nocomments">Comments are closed.</div>
-		<?php endif; ?>
-  	
+
+    <?php endforeach; /* end for each comment */ ?>
+
+    <?php if ($post->info->comments_disabled) : ?>
+      <div class="nocomments">Comments are closed.</div>
+    <?php endif; ?>
+
 
  <?php else : // this is displayed if there are no comments so far ?>
 
-	<?php if ('open' == $post->comment_status) : ?>
-		<!-- If comments are open, but there are no comments. -->
+    <?php if (!$post->info->comments_disabled) : ?>
+        <!-- If comments are open, but there are no comments. -->
 
-	 <?php else : // comments are closed ?>
-		<!-- If comments are closed. -->
-		<div class="nocomments">Comments are closed.</div>
+     <?php else : // comments are closed ?>
+        <!-- If comments are closed. -->
+        <div class="nocomments">Comments are closed.</div>
 
-	<?php endif; ?>
+    <?php endif; ?>
 <?php endif; ?>
 
 
@@ -77,7 +77,7 @@
 
 
     <?php endif; ?>
-    
+
     <fieldset>
       <legend><span>Leave a Comment</span></legend>
       <div class="commentForm">
