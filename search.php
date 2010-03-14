@@ -6,7 +6,7 @@
   <div class="searchpanel">
     <form method="get" id="searchform" action="<?php URL::out('display_search') ?>">
       <div id="search">
-        <input type="text" value="<?php if (isset($criteria)) { echo htmlentities($criteria, ENT_COMPAT, 'UTF-8'); } ?>" name="s" id="s" />
+        <input type="text" value="<?php if (isset($criteria)) { echo htmlentities($criteria, ENT_COMPAT, 'UTF-8'); } ?>" name="criteria" id="criteria" />
         <input type="submit" id="searchsubmit" value="Search" />
       </div>
     </form>
@@ -15,14 +15,14 @@
   <h2>Search Results</h2>
 
 
-        <?php if (count($posts)) : ?>
+    <?php if (count($posts)) : ?>
 
-            <?php foreach ($posts as $post): ?>
+      <?php foreach ($posts as $post): ?>
       <div class="post hentry">
         <div class="postContent">
           <h3 class="entry-title"><a href="<?php echo $post->permalink ?>" rel="bookmark"><?php echo $post->title_out ?></a></h3>
           <div class="entry-content">
-            <?php the_excerpt('Read the rest of this entry &raquo;'); ?>
+            <?php echo $post->content_excerpt ?>
           </div>
         </div>
         <div class="postMeta">
@@ -41,7 +41,7 @@
             <?php endif ?>
         </div>
       </div>
-        <?php endforeach ?>
+      <?php endforeach ?>
 
     <div class="pageNav">
       <div class="prev"><?php $theme->next_page_link('&laquo; Older') ?></div>

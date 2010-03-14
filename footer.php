@@ -22,7 +22,7 @@
     <?php Plugins::act('theme_searchform_before') ?>
     <form method="get" id="searchform" action="<?php URL::out('display_search') ?>">
       <div id="search">
-        <input type="text" value="<?php if (isset($criteria)) { echo htmlentities($criteria, ENT_COMPAT, 'UTF-8'); } ?>" name="s" id="s" />
+        <input type="text" value="<?php if (isset($criteria)) { echo htmlentities($criteria, ENT_COMPAT, 'UTF-8'); } ?>" name="criteria" id="criteria" />
         <input type="submit" id="searchsubmit" value="Search" />
       </div>
     </form>

@@ -7,6 +7,7 @@ class Manifest extends Theme
     public function action_init_theme()
     {
         Format::apply('tag_and_list', 'post_tags_out', ' : ', ' : ');
+        Format::apply_with_hook_params('more', 'post_content_excerpt', '', 56, 1);
     }
 
     /**
