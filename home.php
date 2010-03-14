@@ -1,6 +1,14 @@
 <?php defined('HABARI_PATH') or die('No direct script access.') ?>
 <?php $theme->display('header') ?>
 
+<?php if ($this->request->display_entries_by_tag): ?>
+<h2 class="archiveTitle">Tag: <strong><?php echo $tag ?></strong></h2>
+<?php endif ?>
+
+<?php if ($this->request->display_entries_by_date && isset($month) && !isset($day)): ?>
+<h2 class="archiveTitle">Month: <strong><?php echo date('F, Y', mktime(0, 0, 0, $month, 1, $year)) ?></strong></h2>
+<?php endif ?>
+
     <div id="coreContent" class="hfeed">
 
     <?php if (count($posts)): ?>
