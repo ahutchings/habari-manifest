@@ -84,81 +84,28 @@ class Manifest extends Theme
     }
 
     /**
-     * Retrieve the avatar for a user who provided a user ID or email address.
+     * Retrieve the avatar for a user.
      *
-     * @param int|string|object $id_or_email A user ID,  email address, or comment object
-     * @param int $size Size of the avatar image
-     * @param string $default URL to a default image to use if no avatar is available
-     * @param string $alt Alternate text to use in image tag. Defaults to blank
+     * @param object $comment A comment object
+     *
      * @return string <img> tag for the user's avatar
     */
-    function get_avatar($id_or_email, $size = '96', $default = '', $alt = false)
+    function get_avatar($comment)
     {
-        if ( false === $alt)
-            $safe_alt = '';
-        else
-            $safe_alt = esc_attr( $alt );
+        $size = 48;
+        $host = (self::is_ssl()) ? 'https://secure.gravatar.com' : 'http://www.gravatar.com';
 
-        if ( !is_numeric($size) )
-            $size = '96';
+        $default = "$host/avatar/ad516503a11cd5ca435acc9bb6523536?s=$size"; // ad516503a11cd5ca435acc9bb6523536 == md5('unknown@gravatar.com')
 
-        $email = '';
-        if ( is_numeric($id_or_email) ) {
-            $id = (int) $id_or_email;
-            $user = get_userdata($id);
-            if ( $user )
-                $email = $user->user_email;
-        } elseif ( is_object($id_or_email) ) {
-            if ( isset($id_or_email->comment_type) && '' != $id_or_email->comment_type && 'comment' != $id_or_email->comment_type )
-                return false; // No avatar for pingbacks or trackbacks
-
-            if ( !empty($id_or_email->user_id) ) {
-                $id = (int) $id_or_email->user_id;
-                $user = get_userdata($id);
-                if ( $user)
-                    $email = $user->user_email;
-            } elseif ( !empty($id_or_email->comment_author_email) ) {
-                $email = $id_or_email->comment_author_email;
-            }
-        } else {
-            $email = $id_or_email;
-        }
-
-        if ( empty($default) ) {
-                $default = 'mystery';
-        }
-
-        if (self::is_ssl())
-            $host = 'https://secure.gravatar.com';
-        else
-            $host = 'http://www.gravatar.com';
-
-        if ( 'mystery' == $default )
-            $default = "$host/avatar/ad516503a11cd5ca435acc9bb6523536?s={$size}"; // ad516503a11cd5ca435acc9bb6523536 == md5('unknown@gravatar.com')
-        elseif ( 'blank' == $default )
-            $default = includes_url('images/blank.gif');
-        elseif ( !empty($email) && 'gravatar_default' == $default )
-            $default = '';
-        elseif ( 'gravatar_default' == $default )
-            $default = "$host/avatar/s={$size}";
-        elseif ( empty($email) )
-            $default = "$host/avatar/?d=$default&amp;s={$size}";
-        elseif ( strpos($default, 'http://') === 0 )
-            $default = add_query_arg( 's', $size, $default );
-
-        if ( !empty($email) ) {
+        if (!empty($comment->email)) {
             $out = "$host/avatar/";
-            $out .= md5( strtolower( $email ) );
-            $out .= '?s='.$size;
-            $out .= '&amp;d=' . urlencode( $default );
+            $out .= md5(strtolower($comment->email));
+            $out .= "?s=$size";
+            $out .= '&amp;d='.urlencode($default);
 
-            $rating = get_option('avatar_rating');
-            if ( !empty( $rating ) )
-                $out .= "&amp;r={$rating}";
-
-            $avatar = "<img alt='{$safe_alt}' src='{$out}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
+            $avatar = "<img alt='' src='{$out}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
         } else {
-            $avatar = "<img alt='{$safe_alt}' src='{$default}' class='avatar avatar-{$size} photo avatar-default' height='{$size}' width='{$size}' />";
+            $avatar = "<img alt='' src='{$default}' class='avatar avatar-{$size} photo avatar-default' height='{$size}' width='{$size}' />";
         }
 
         return $avatar;

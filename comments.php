@@ -15,7 +15,7 @@
         }
     ?>
     <div class="commentEntry">
-      <?php echo $theme->get_avatar($comment, $size = '48') ?>
+      <?php echo $theme->get_avatar($comment) ?>
         <div class="commentContent" id="comment-<?php echo $comment->id ?>">
         <?php if ($comment->status == Comment::STATUS_UNAPPROVED) : ?>
             <em>Your comment is awaiting moderation.</em>
