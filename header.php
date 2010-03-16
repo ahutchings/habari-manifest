@@ -8,15 +8,15 @@
     <title><?php $theme->out_title() ?> <?php Options::out('title') ?></title>
 
 <!--[if gte IE 7]><!-->
-  <link rel="stylesheet" href="<?php echo Site::out_url('theme') ?>/style.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="<?php Site::out_url('theme') ?>/style.css" type="text/css" media="screen" charset="utf-8" />
 <!-- <![endif]-->
 
 <!--[if IE 7]>
-  <link rel="stylesheet" href="<?php echo Site::out_url('theme') ?>/style_ie.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="<?php Site::out_url('theme') ?>/style_ie.css" type="text/css" media="screen" charset="utf-8" />
 <![endif]-->
 
 <!--[if IE 6]>
-<link rel="stylesheet" type="text/css" media="screen" href="<?php echo Site::out_url('theme') ?>/styles_ie6.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="<?php Site::out_url('theme') ?>/styles_ie6.css" />
 <![endif]-->
 
   <link rel="alternate" type="application/atom+xml" title="<?php Options::out('title') ?> Atom Feed" href="<?php $theme->feed_alternate() ?>" />
