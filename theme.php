@@ -11,32 +11,41 @@ class Manifest extends Theme
     }
 
     /**
-    * Basic emulation of wp_title().
-    */
-    public function title($sep = '&raquo;', $echo = true, $seplocation = null)
+     * Output the page title.
+     */
+    public function out_title()
     {
         switch (URL::get_matched_rule()->name) {
         case 'display_entry':
         case 'display_page':
-            $title = $this->post->title.' &#8211; '.Options::get('title');
+            $title = $this->post->title;
             break;
 
         case 'display_entries_by_tag':
-            $title = 'Tag Archive for &#8220;'.$this->tag.'&#8221; &#8211; '.Options::get('title');
+            $title = $this->tag;
             break;
 
-        case 'display_home':
+        case 'display_entries_by_date':
+            $args = URL::get_matched_rule()->named_arg_values;
+
+            if (isset($args['day'])) {
+                $title = date('d : F : Y', mktime(0, 0, 0, $args['month'], $args['day'], $args['year']));
+            } elseif (isset($args['month'])) {
+                $title = date('F : Y', mktime(0, 0, 0, $args['month'], 1, $args['year']));
+            } else {
+                $title = date('Y', mktime(0, 0, 0, 1, 1, $args['year']));
+            }
+            break;
+
         default:
-            $title = null;
+            $title = NULL;
         }
 
         if (!empty($title)) {
-            $title = ($seplocation == 'right') ? $title.' '.$sep : $sep.' '.$title;
+            $title .= ' :';
         }
 
-        if ($echo) { echo $title; }
-
-        return $title;
+        echo $title;
     }
 
     /**

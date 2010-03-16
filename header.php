@@ -5,7 +5,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <title><?php $theme->title(':', true, 'right'); ?> <?php Options::out('title') ?></title>
+    <title><?php $theme->out_title() ?> <?php Options::out('title') ?></title>
 
 <!--[if gte IE 7]><!-->
   <link rel="stylesheet" href="<?php echo Site::out_url('theme') ?>/style.css" type="text/css" media="screen" charset="utf-8" />
