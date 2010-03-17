@@ -41,7 +41,7 @@
 
         <?php endif; ?>
 
-            <?php $theme->comments_popup_link($post, 'leave a comment', '1 comment', '% comments', '', 'comments closed'); ?>
+            <?php $theme->comments_link($post) ?>
           </div>
         </div>
       </div>

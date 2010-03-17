@@ -72,21 +72,20 @@ class Manifest extends Theme
     }
 
     /**
-     * Emulate Wordpress's comments_popup_link().
+     * Output a link to the post's comment form.
      */
-    public function comments_popup_link($post, $zero = 'No Comments', $one = '1 Comment', $more = '% Comments', $class = '', $none = 'Comments Off')
+    public function comments_link($post)
     {
         if ($post->info->comments_disabled) {
-            $content = $none;
+            $content = 'comments closed';
         } elseif ($post->comments->approved->count == 0) {
-            $content = $zero;
-        } elseif ($post->comments->approved->count == 1) {
-            $content = $one;
-        } elseif ($post->comments->approved->count > 1) {
-            $content = str_replace('%', $post->comments->approved->count, $more);
+            $content = 'leave a comment';
+        } else {
+            $content = $post->comments->approved->count . ' '
+                . _n('comment', 'comments', $post->comments->approved->count);
         }
 
-        echo "<a href=\"{$post->permalink}#comments\" title=\""
+        echo '<a href="'.$post->permalink.'#comments" title="'
             . _t('Comments on this post') . '">'
             . $content
             . '</a>';
@@ -148,7 +147,7 @@ class Manifest extends Theme
         parent::add_template_vars();
     }
 
-    public function tag_cloud($args = '')
+    public function tag_cloud()
     {
         $tags = Tags::get();
 
