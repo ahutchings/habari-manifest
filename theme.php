@@ -49,11 +49,13 @@ class Manifest extends Theme
     }
 
     /**
-    * Basic emulation of wp_list_pages().
-    */
+     * Output a list of pages.
+     *
+     * @return null
+     */
     public function list_pages()
     {
-        $items = array();
+        $out = array();
 
         $pages = Posts::get(array('content_type' => 'page', 'status' => Post::status('published'), 'nolimit' => 1));
 
@@ -65,14 +67,18 @@ class Manifest extends Theme
                 $classes[] = 'current_page_item';
             }
 
-            $items[] = '<li class="'.implode(' ', $classes).'">'.$anchor.'</li>';
+            $out[] = '<li class="'.implode(' ', $classes).'">'.$anchor.'</li>';
         }
 
-        echo implode("\n", $items);
+        echo implode("\n", $out);
     }
 
     /**
      * Output a link to the post's comment form.
+     *
+     * @param object $post Post object
+     *
+     * @return null
      */
     public function comments_link($post)
     {
@@ -147,6 +153,11 @@ class Manifest extends Theme
         parent::add_template_vars();
     }
 
+    /**
+     * Retrieve an unordered list of tags.
+     *
+     * @return string
+     */
     public function tag_cloud()
     {
         $tags = Tags::get();
@@ -160,68 +171,59 @@ class Manifest extends Theme
             $counts[] = $tag->count;
         }
 
-        $largest = 22;
-        $smallest = 8;
+        $min    = min($counts);
+        $step   = 14 / max(max($counts) - $min, 1);
 
-        $min_count = min( $counts );
-        $spread = max( $counts ) - $min_count;
-        if ( $spread <= 0 )
-            $spread = 1;
-        $font_spread = $largest - $smallest;
-        if ( $font_spread < 0 )
-            $font_spread = 1;
-        $font_step = $font_spread / $spread;
-
-        $a = array();
+        $out[] = '<ul class="tag-cloud">';
 
         foreach ($tags as $tag) {
-            $tag_link = URL::get('display_entries_by_tag', array('tag' => $tag->slug));
-            $a[] = "<a href='$tag_link' class='tag-link-$tag->id' title='" . $tag->count. " topic(s)' rel='tag' style='font-size: " .
-                ( $smallest + ( ( $tag->count - $min_count ) * $font_step ) )
-                . "pt;'>$tag->tag</a>";
+            $link = URL::get('display_entries_by_tag', array('tag' => $tag->slug));
+            $size = 8 + (($tag->count - $min) * $step);
+
+            $out[] = '<li>';
+            $out[] = "<a href='$link' class='tag-link-$tag->id' title='".$tag->count." topic(s)' rel='tag' style='font-size:"
+                .$size."pt;'>$tag->tag</a>";
+            $out[] = '</li>';
         }
 
-        $return = "<ul class='wp-tag-cloud'>\n\t<li>";
-        $return .= implode( "</li>\n\t<li>", $a );
-        $return .= "</li>\n</ul>\n";
+        $out[] = '</ul>';
 
-        return $return;
+        return implode("\n", $out);
     }
 
+    /**
+     * Retrieve an unordered list of monthly archive links.
+     *
+     * @return string
+     */
     public function get_archives()
     {
-        $q = "SELECT YEAR( FROM_UNIXTIME(pubdate) ) AS year, MONTH(  FROM_UNIXTIME(pubdate)  ) AS month, COUNT( id ) AS cnt
+        $q = "SELECT YEAR(FROM_UNIXTIME(pubdate)) AS year, MONTH(FROM_UNIXTIME(pubdate)) AS month
                 FROM  {posts}
                 WHERE content_type = ? AND status = ?
                 GROUP BY year, month
                 ORDER BY pubdate DESC";
-        $p[]= Post::type( 'entry' );
-        $p[]= Post::status( 'published' );
-        $results = DB::get_results( $q, $p );
+        $p = array(Post::type('entry'), Post::status('published'));
+        $results = DB::get_results($q, $p);
 
+        $out[] = '<ul id="monthly_archives">';
 
-        $archives[]= '<ul id="monthly_archives">';
-
-        if ( empty( $results ) ) {
-            $archives[]= '<li>No Archives Found</li>';
+        if (empty($results)) {
+            $out[] = '<li>No Archives Found</li>';
         } else {
             foreach ($results as $result) {
-
                 // make sure the month has a 0 on the front, if it doesn't
-                $result->month = str_pad( $result->month, 2, 0, STR_PAD_LEFT );
+                $result->month = str_pad($result->month, 2, 0, STR_PAD_LEFT);
+                $display_month = date('F', mktime(0, 0, 0, $result->month));
 
-                $result->month_ts = mktime( 0, 0, 0, $result->month );
-                $result->display_month = date('F', $result->month_ts);
-
-                $archives[]= '<li>';
-                $archives[]= '<a href="' . URL::get( 'display_entries_by_date', array('year' => $result->year, 'month' => $result->month)) . '" title="' . $result->display_month . ' ' . $result->year . '">' . $result->display_month . ' ' . $result->year . '</a>';
-                $archives[]= '</li>';
-
+                $out[] = '<li>';
+                $out[] = '<a href="' . URL::get('display_entries_by_date', array('year' => $result->year, 'month' => $result->month)) . '" title="' . $display_month . ' ' . $result->year . '">' . $display_month . ' ' . $result->year . '</a>';
+                $out[] = '</li>';
             }
         }
 
-        $archives[]= '</ul>';
+        $out[] = '</ul>';
 
-        return implode("\n", $archives);
+        return implode("\n", $out);
     }
 }
